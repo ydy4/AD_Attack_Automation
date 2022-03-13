@@ -1,3 +1,3 @@
 # AD_Attack_Automation
-We can differently automate some network &amp; AD attacks using simple Bash Scripts 
+We can differently automate some network &amp; AD attacks using simple Bash Scripts.
 This Repo contains Scripts that automate techniques that i have observed from IPPsec channel, Hacktricks, Pentestlab ...
