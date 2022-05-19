@@ -10,3 +10,6 @@ This Script will take a NTLM hash and try all PTH techniques (psexec,smbexec,wmi
 
 This script will enumerate shares and grap what ever it could from a DC using null sessions and some impackets tools.
 
+## Network_Allin1.sh
+
+This script will find network printers and do some pentest also will use evil_ssdp and try to identify if trunking is enabled on swtich port alors capture creds.
