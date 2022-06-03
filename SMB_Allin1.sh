@@ -60,6 +60,13 @@ echo "${BLUE} rpcclient -U "Guest" $IP --no-pass ${ENDCOLOR}"
 rpcclient -U "Guest" $IP --no-pass
 echo "${BLUE} rpcclient -U "Guest" -P "Guest" $IP ${ENDCOLOR}"
 rpcclient -U "Guest" -P "Guest" $IP 
+echo "${RED}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DNS Stuff~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
+echo "${BLUE} dig axfr @$IP ${ENDCOLOR}"
+dig axfr @$IP
+echo "${BLUE} dig axfr @$IP $Domain_Name ${ENDCOLOR}"
+dig axfr @$IP $Domain_Name
+echo "${BLUE} fierce --domain $Domain_Name --dns-servers $IP ${ENDCOLOR}"
+fierce --domain $Domain_Name --dns-servers $IP
 echo "${RED}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Impacket~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
 echo "${BLUE} GetADUsers.py -dc-ip $IP $Domain_Name/ -all ${ENDCOLOR}"
 GetADUsers.py -dc-ip $IP "$Domain_Name/" -all
