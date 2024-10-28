@@ -75,20 +75,22 @@ GetNPUsers.py -dc-ip $IP -request "$Domain_Name/" -usersfile $Valide_users -form
 echo "${BLUE} GetUserSPNs.py -dc-ip $IP -request "$Domain_Name/" ${ENDCOLOR}"
 GetUserSPNs.py -dc-ip $IP -request "$Domain_Name/"
 echo "${BLUE} lookupsid.py guest@$IP --no-pass${ENDCOLOR}"
-lookupsid.py guest@$IP --no-pass
+lookupsid.py guest@$IP -no-pass
 echo "${BLUE} getArch.py -target $IP ${ENDCOLOR}"
 getArch.py -target $IP
 
+SUBDOMAIN=$(echo "$Domain_Name" | cut -d '.' -f 1)
+TLD=$(echo "$Domain_Name" | cut -d '.' -f 2)
+
 echo "${RED}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~LDAP~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${ENDCOLOR}"
 echo "${BLUE} ldapsearch -h $IP -x -s base namingcontexts ${ENDCOLOR}"
-ldapsearch -h $IP -x -s base namingcontexts
+ldapsearch -x -H ldap://$IP
 
-#parse variables
-#Read the split words into an array based on space delimiter
-#IFS='.'
-#read -a strarr <<< "$Domain_Name"
-#set variables NT and LM
-#LM="${strarr[0]}"
-#NT="${strarr[1]}"
-#echo "${BLUE} ldapsearch -h $IP -x -b "dc=$LM,dc=$NT" ${ENDCOLOR}"
-#ldapsearch -h $IP -x -b "dc=$LM,dc=$NT"
+echo "${BLUE} ldapsearch -x -H ldap://$IP -D '' -w '' -b "DC=SUBDOMAIN,DC=TLD" ${ENDCOLOR}"
+ldapsearch -x -H ldap://"$IP" -D '' -w '' -b "DC=$SUBDOMAIN,DC=$TLD"  
+echo "${BLUE} ldapsearch -x -H ldap://$IP:3268 -D '' -w '' -b "DC=SUBDOMAIN,DC=TLD" ${ENDCOLOR}"
+ldapsearch -x -H ldap://"$IP:3268" -D '' -w '' -b "DC=$SUBDOMAIN,DC=$TLD"  
+echo "${BLUE} ldapsearch -x -H ldap://$IP:636 -D '' -w '' -b "DC=SUBDOMAIN,DC=TLD" ${ENDCOLOR}"
+ldapsearch -x -H ldap://"$IP:636" -D '' -w '' -b "DC=$SUBDOMAIN,DC=$TLD"  
+echo "${BLUE} ldapsearch -x -H ldap://$IP:3269 -D '' -w '' -b "DC=SUBDOMAIN,DC=TLD" ${ENDCOLOR}"
+ldapsearch -x -H ldap://"$IP:3269" -D '' -w '' -b "DC=$SUBDOMAIN,DC=$TLD" 
